@@ -9,12 +9,12 @@ on:
 
 jobs:
   pr-gate:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os || 'ubuntu-latest' }}
     strategy:
       fail-fast: false
       matrix:
         include:
-          - {python: "3.10", torch: "1.12.1"}   # oldest supported torch
+          - {python: "3.10", torch: "1.12.1", os: ubuntu-24.04}   # oldest supported torch (its wheel no longer loads on newer glibc)
           - {python: "3.11", torch: ""}         # latest
           - {python: "3.12", torch: ""}
     steps:
