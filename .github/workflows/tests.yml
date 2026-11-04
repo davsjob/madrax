@@ -14,8 +14,8 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - {python: "3.8",  torch: "1.12.1"}   # oldest supported torch
-          - {python: "3.10", torch: ""}         # latest
+          - {python: "3.10", torch: "1.12.1"}   # oldest supported torch
+          - {python: "3.11", torch: ""}         # latest
           - {python: "3.12", torch: ""}
     steps:
       - uses: actions/checkout@v4
