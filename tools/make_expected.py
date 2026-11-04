@@ -1,6 +1,6 @@
-"""Regenerate tests/data/golden/*.npz from an UPSTREAM checkout. Never run as part of the test suite.
+"""Regenerate tests/data/expected/*.npz from an UPSTREAM checkout. Never run as part of the test suite.
 
-    MADRAX_PATH=/path/to/upstream/madrax python tools/make_golden.py
+    MADRAX_PATH=/path/to/upstream/madrax python tools/make_expected.py
 
 Only inputs that none of the fixed bugs touch are frozen: single proteins with residue
 numbers >= 0, no altlocs, no CA-less residues, at most one mutant per position.
@@ -26,7 +26,7 @@ from madrax.ForceField import ForceField  # noqa: E402
 from madrax import utils, dataStructures  # noqa: E402
 from conftest import read_lines, write  # noqa: E402
 
-out_dir = os.path.join(TESTS, "data", "golden")
+out_dir = os.path.join(TESTS, "data", "expected")
 os.makedirs(out_dir, exist_ok=True)
 tmp = os.path.join(out_dir, "_tmp")
 os.makedirs(tmp, exist_ok=True)

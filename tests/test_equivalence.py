@@ -1,4 +1,4 @@
-"""Speedups change nothing: fast paths vs master's code (kept in tests/reference) and vs golden output from master."""
+"""Speedups change nothing: fast paths vs master's code (kept in tests/reference) and vs output computed with master."""
 import os
 
 import numpy as np
@@ -9,7 +9,7 @@ from conftest import DATA, dataStructures, assert_energy_close
 from madrax.mutate import mutatingEngine
 from reference.dense import dense_pairwise_representation
 
-GOLDEN = os.path.join(DATA, "golden")
+EXPECTED = os.path.join(DATA, "expected")
 
 
 def _pairs(ff, coords, names, dense=False):
@@ -56,22 +56,22 @@ def test_pairs_identical_to_dense_large(parse, ff):
     assert torch.equal(_pairs(ff, c, n), _pairs(ff, c, n, dense=True))
 
 
-# ---------------------------------------------------------------- golden output from master
-def _golden(name):
-    path = os.path.join(GOLDEN, name + ".npz")
+# ---------------------------------------------------------------- output computed with master
+def _expected(name):
+    path = os.path.join(EXPECTED, name + ".npz")
     if not os.path.exists(path):
-        pytest.skip("golden file missing: run tools/make_golden.py against master")
+        pytest.skip("expected-output file missing: run tools/make_expected.py against master")
     return np.load(path)
 
 
 @pytest.mark.parametrize("name", ["small", "multichain", pytest.param("large", marks=pytest.mark.slow)])
-def test_energy_matches_master_golden(parse, energy, name):
-    g = _golden(name)
-    assert_energy_close(energy(*parse(name)), torch.tensor(g["energy"]), what="%s vs master golden" % name)
+def test_energy_matches_master(parse, energy, name):
+    g = _expected(name)
+    assert_energy_close(energy(*parse(name)), torch.tensor(g["energy"]), what="%s vs master" % name)
 
 
-def test_gradient_matches_master_golden(parse, ff):
-    g = _golden("small")
+def test_gradient_matches_master(parse, ff):
+    g = _expected("small")
     c, n = parse("small")
     c = c.clone().requires_grad_(True)
     ff(c, dataStructures.create_info_tensors(n)).sum().backward()
